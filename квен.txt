@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Сравнительное исследование топовых моделей ИИ 2026 года</title>
+
+  <!-- Essential CDN Libraries -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: 'hsl(210, 75%, 95%)',
+              100: 'hsl(210, 75%, 85%)',
+              200: 'hsl(210, 75%, 75%)',
+              300: 'hsl(210, 75%, 65%)',
+              400: 'hsl(210, 75%, 55%)',
+              500: 'hsl(210, 75%, 40%)',
+              600: 'hsl(210, 75%, 35%)',
+              700: 'hsl(210, 75%, 25%)',
+              800: 'hsl(210, 75%, 15%)',
+              900: 'hsl(210, 75%, 10%)'
+            },
+            accent: {
+              50: 'hsl(240, 65%, 95%)',
+              100: 'hsl(240, 65%, 85%)',
+              200: 'hsl(240, 65%, 75%)',
+              300: 'hsl(240, 65%, 65%)',
+              400: 'hsl(240, 65%, 60%)',
+              500: 'hsl(240, 65%, 55%)',
+              600: 'hsl(240, 65%, 50%)',
+              700: 'hsl(240, 65%, 40%)',
+              800: 'hsl(240, 65%, 30%)',
+              900: 'hsl(240, 65%, 20%)'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
+
+  <!-- Preline UI Components -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/preline@2.0.3/dist/preline.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/preline@2.0.3/dist/preline.js"></script>
+
+  <!-- Micro-interactions & Custom Styles -->
+  <style>
+    html { scroll-behavior: smooth; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      html { scroll-behavior: auto; }
+    }
+
+    .btn-interactive {
+      transition: all 0.2s ease-out;
+    }
+    
+    .btn-interactive:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+    
+    .btn-interactive:active {
+      transform: scale(0.95);
+    }
+
+    .card-interactive {
+      transition: all 0.3s ease-out;
+      border: 1px solid transparent;
+      --border-lightness: 40%;
+    }
+
+    .dark .card-interactive {
+      --border-lightness: 60%;
+    }
+
+    .card-interactive:hover {
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      filter: brightness(0.98);
+    }
+    
+    /* Primary colored cards */
+    .card-interactive[class*="primary"]:hover,
+    .card-interactive[class*="white"]:hover,
+    .card-interactive[class*="gray-"]:hover {
+      border-color: hsl(210, 75%, var(--border-lightness));
+    }
+    
+    /* Accent colored cards */
+    .card-interactive[class*="accent"]:hover {
+      border-color: hsl(240, 65%, var(--border-lightness));
+    }
+  </style>
+
+  <script>
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark');
+      const isDark = document.body.classList.contains('dark');
+      document.getElementById('sunIcon').style.display = isDark ? 'block' : 'none';
+      document.getElementById('moonIcon').style.display = isDark ? 'none' : 'block';
+    }
+  </script>
+</head>
+
+<body class="transition-colors duration-300 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+  <!-- Progress bar -->
+  <div class="fixed top-0 left-0 h-1 bg-primary-500 dark:bg-primary-400 z-[60] transition-all duration-300 ease-out" id="progressBar"></div>
+
+  <!-- Floating Header -->
+  <header class="fixed top-0 left-0 right-0 z-50 backdrop-blur bg-gray-50/90 dark:bg-gray-900/90 border-b border-primary-500/20 dark:border-primary-600/20">
+    <div class="max-w-7xl mx-auto px-6 py-4">
+      <div class="flex items-center justify-between">
+        <h1 class="text-xl font-bold text-primary-700 dark:text-primary-300">Сравнение моделей ИИ 2026</h1>
+        
+        <nav class="hidden md:flex items-center space-x-6">
+          <a href="#overview" class="text-sm text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Обзор</a>
+          <a href="#models" class="text-sm text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Модели</a>
+          <a href="#benchmarks" class="text-sm text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Бенчмарки</a>
+          <a href="#metrics" class="text-sm text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Метрики</a>
+          <a href="#profiles" class="text-sm text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Профили</a>
+          <a href="#analysis" class="text-sm text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Анализ</a>
+          <a href="#conclusion" class="text-sm text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Заключение</a>
+        </nav>
+
+        <button onclick="toggleDarkMode()" class="btn-interactive p-2 rounded-lg bg-primary-100 dark:bg-primary-800 text-primary-600 dark:text-primary-300 hover:bg-primary-200 dark:hover:bg-primary-700 transition-all">
+          <i data-lucide="sun" id="sunIcon" class="w-5 h-5" style="display: none;"></i>
+          <i data-lucide="moon" id="moonIcon" class="w-5 h-5" style="display: block;"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="min-h-screen">
+    <!-- Hero Section -->
+    <section id="overview" class="py-40 bg-primary-50/50 dark:bg-gray-900" data-aos="fade-up">
+      <div class="max-w-5xl mx-auto px-6">
+        <div class="text-center mb-12">
+          <h2 class="text-4xl md:text-5xl font-bold mb-6 text-primary-700 dark:text-primary-300" data-ref="https://zhuanlan.zhihu.com/p/1999451053826003166|23">
+            Сравнительное исследование топовых моделей ИИ 2026 года
+          </h2>
+          <p class="text-xl text-gray-700 dark:text-gray-300 leading-relaxed">
+            Всесторонний анализ пяти ведущих проприетарных моделей искусственного интеллекта: Qwen 3.5-Plus, Claude Opus 4.5/4.6, GPT-5.2, Gemini 3 Pro и Kimi 2.5
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8 items-start">
+          <div class="space-y-6">
+            <p class="text-gray-700 dark:text-gray-300 leading-relaxed" data-ref="https://openai.com/zh-Hans-CN/index/introducing-gpt-5-2/|24">
+              Модель GPT-5.2 представляет собой самую мощную серию моделей OpenAI на сегодняшний день, предназначенную для профессиональной работы. Она была выпущена в трех версиях: Instant (для ежедневных задач), Thinking (для сложных задач) и Pro (для задач высокой сложности).
+            </p>
+
+            <p class="text-gray-700 dark:text-gray-300 leading-relaxed" data-ref="https://docs.anthropic.com/en/release-notes/api|41">
+              Claude Opus 4.6 — наша наиболее интеллектуальная модель для сложных агентских задач и долгосрочной работы. Opus 4.6 рекомендует адаптивное мышление и демонстрирует улучшенные навыки программирования.
+            </p>
+
+            <p class="text-gray-700 dark:text-gray-300 leading-relaxed" data-ref="https://zhuanlan.zhihu.com/p/1994362083245039918|21">
+              Gemini 3 Pro — флагманская модель от Google DeepMind, выпущенная в конце 2025 года. Она представляет собой парадигмальный сдвиг к глубокому рассуждению и агентскому выполнению, выходя за рамки простой генерации контента.
+            </p>
+          </div>
+
+          <img
+            src="https://cdn.qwenlm.ai/84f9340c-8f06-4d15-ad83-2283a27e7720/e59e8f1e-7d7c-4506-92ab-d9f81fd961b2/57dfefe6-b533-4f8c-830f-7019b6a64fca.png?key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZV91c2VyX2lkIjoiODRmOTM0MGMtOGYwNi00ZDE1LWFkODMtMjI4M2EyN2U3NzIwIiwicmVzb3VyY2VfaWQiOiJlNTllOGYxZS03ZDdjLTQ1MDYtOTJhYi1kOWY4MWZkOTYxYjIiLCJyZXNvdXJjZV9jaGF0X2lkIjpudWxsfQ.dQr9KjsGTZ5Tejv-sfvrR2cCgN7pJ0qxW1b2p-2i2yY"
+            alt="Концептуальная иллюстрация пяти крупных AI-моделей, расположенных горизонтально в ряд на светло-сером градиентном фоне (от #F5F5F5 до #E8E8E8). Слева направо: Qwen 3.5-Plus (иконка золотого льва на круглом фоне цвета #FFD700), Claude Opus 4.5/4.6 (синий ромб с белым символом 'A' на фоне #1E90FF), GPT-5.2 (оранжевый круг с белым логотипом 'G' на фоне #FF8C00), Gemini 3 Pro (фиолетовый гексагон с белым символом 'G' на фоне #9370DB), Kimi 2.5 (зеленый прямоугольник с белым символом 'K' на фоне #228B22). Над каждой моделью — небольшая белая этикетка с названием модели черным шрифом. Под всеми моделями — тонкая горизонтальная линия цвета #4A90E2 шириной 100% и высотой 3px. Композиция чистая, минималистичная, каждая модель занимает примерно одинаковое пространство, общее расположение симметричное и сбалансированное."
+            class="w-full rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300"
+          />
+        </div>
+
+        <div class="mt-8 pl-4 pr-3 py-3 border-l-4 border-primary-500 bg-primary-50/40 dark:bg-primary-900/30 rounded-r-lg">
+          <p class="text-sm font-medium text-primary-900 dark:text-primary-100 leading-relaxed" data-ref="https://zhuanlan.zhihu.com/p/1999451053826003166|23">
+            <i data-lucide="info" class="inline-block w-4 h-4 mr-1.5 -mt-0.5"></i>
+            Ключевое достижение: Qwen3-Max-Thinking достигла более 1 триллиона параметров и была обучена на 36 триллионах токенов, установив новые мировые рекорды в нескольких ключевых бенчмарках.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Models Comparison Section -->
+    <section id="models" class="py-20 bg-white/80 dark:bg-gray-900" data-aos="fade-up">
+      <div class="max-w-6xl mx-auto px-6">
+        <h2 class="text-3xl font-bold mb-8 text-primary-700 dark:text-primary-300">
+          Обзор ключевых моделей
+        </h2>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- GPT-5.2 Card -->
+          <div class="card-interactive p-6 bg-white/90 backdrop-blur-sm dark:bg-gray-800 rounded-xl shadow-md" data-aos="fade-up" data-aos-delay="100">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center mr-4">
+                <i data-lucide="cpu" class="w-6 h-6 text-primary-600 dark:text-primary-400"></i>
+              </div>
+              <h3 class="text-xl font-semibold text-primary-700 dark:text-primary-300" data-ref="https://openai.com/zh-Hans-CN/index/introducing-gpt-5-2/|24">GPT-5.2</h3>
+            </div>
+            <p class="text-gray-700 dark:text-gray-300 text-sm mb-3">
+              Самая мощная серия моделей OpenAI для профессиональной работы, включающая Instant, Thinking и Pro версии.
+            </p>
+            <div class="space-y-2">
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600 dark:text-gray-400">Контекст:</span>
+                <span class="font-semibold text-primary-600 dark:text-primary-400">200k/10M</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600 dark:text-gray-400">Цена:</span>
+                <span class="font-semibold text-primary-600 dark:text-primary-400">$1.75/$14</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Claude Opus Card -->
+          <div class="card-interactive p-6 bg-white/90 backdrop-blur-sm dark:bg-gray-800 rounded-xl shadow-md" data-aos="fade-up" data-aos-delay="200">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 bg-accent-100 dark:bg-accent-900/30 rounded-lg flex items-center justify-center mr-4">
+                <i data-lucide="shield-check" class="w-6 h-6 text-accent-600 dark:text-accent-400"></i>
+              </div>
+              <h3 class="text-xl font-semibold text-accent-700 dark:text-accent-300" data-ref="https://docs.anthropic.com/en/release-notes/api|41">Claude Opus 4.6</h3>
+            </div>
+            <p class="text-gray-700 dark:text-gray-300 text-sm mb-3">
+              Наиболее интеллектуальная модель для сложных агентских задач и долгосрочной работы.
+            </p>
+            <div class="space-y-2">
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600 dark:text-gray-400">Контекст:</span>
+                <span class="font-semibold text-accent-600 dark:text-accent-400">500k</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600 dark:text-gray-400">Цена:</span>
+                <span class="font-semibold text-accent-600 dark:text-accent-400">$5/$10</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Gemini 3 Pro Card -->
+          <div class="card-interactive p-6 bg-white/90 backdrop-blur-sm dark:bg-gray-800 rounded-xl shadow-md" data-aos="fade-up" data-aos-delay="300">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center mr-4">
+                <i data-lucide="brain" class="w-6 h-6 text-primary-600 dark:text-primary-400"></i>
+              </div>
+              <h3 class="text-xl font-semibold text-primary-700 dark:text-primary-300" data-ref="https://zhuanlan.zhihu.com/p/1994362083245039918|21">Gemini 3 Pro</h3>
+            </div>
+            <p class="text-gray-700 dark:text-gray-300 text-sm mb-3">
+              Флагманская модель Google DeepMind с глубоким рассуждением и агентским выполнением.
+            </p>
+            <div class="space-y-2">
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600 dark:text-gray-400">Контекст:</span>
+                <span class="font-semibold text-primary-600 dark:text-primary-400">1M</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600 dark:text-gray-400">Визуал:</span>
+                <span class="font-semibold text-primary-600 dark:text-primary-400">Native Spatial</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Qwen3-Max-Thinking Card -->
+          <div class="card-interactive p-6 bg-white/90 backdrop-blur-sm dark:bg-gray-800 rounded-xl shadow-md" data-aos="fade-up" data-aos-delay="400">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 bg-accent-100 dark:bg-accent-900/30 rounded-lg flex items-center justify-center mr-4">
+                <i data-lucide="zap" class="w-6 h-6 text-accent-600 dark:text-accent-400"></i>
+              </div>
+              <h3 class="text-xl font-semibold text-accent-700 dark:text-accent-300" data-ref="https://zhuanlan.zhihu.com/p/1999451053826003166|23">Qwen3-Max-Thinking</h3>
+            </div>
+            <p class="text-gray-700 dark:text-gray-300 text-sm mb-3">
+              Флагманская модель рассуждений Alibaba с более чем 1 триллионом параметров.
+            </p>
+            <div class="space-y-2">
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600 dark:text-gray-400">Параметры:</span>
+                <span class="font-semibold text-accent-600 dark:text-accent-400">&gt;1T</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600 dark:text-gray-400">Токены:</span>
+                <span class="font-semibold text-accent-600 dark:text-accent-400">36T</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Kimi K2.5 Card -->
+          <div class="card-interactive p-6 bg-white/90 backdrop-blur-sm dark:bg-gray-800 rounded-xl shadow-md" data-aos="fade-up" data-aos-delay="500">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center mr-4">
+                <i data-lucide="eye" class="w-6 h-6 text-primary-600 dark:text-primary-400"></i>
+              </div>
+              <h3 class="text-xl font-semibold text-primary-700 dark:text-primary-300" data-ref="https://news.aibase.com/news/24963|7">Kimi K2.5</h3>
+            </div>
+            <p class="text-gray-700 dark:text-gray-300 text-sm mb-3">
+              Тихий запуск с обновлениями веб-интерфейса, режимом мышления и мультимодальной поддержкой.
+            </p>
+            <div class="space-y-2">
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600 dark:text-gray-400">Функция:</span>
+                <span class="font-semibold text-primary-600 dark:text-primary-400">Thought Mode</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600 dark:text-gray-400">Поддержка:</span>
+                <span class="font-semibold text-primary-600 dark:text-primary-400">Multimodal</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Benchmarks Section -->
+    <section id="benchmarks" class="py-20 bg-primary-50/50 dark:bg-gray-800" data-aos="fade-up">
+      <div class="max-w-6xl mx-auto px-6">
+        <h2 class="text-3xl font-bold mb-8 text-primary-700 dark:text-primary-300">
+          Результаты бенчмарков
+        </h2>
+
+        <div class="grid md:grid-cols-2 gap-8 items-start mb-12">
+          <div class="space-y-6">
+            <h3 class="text-xl font-semibold text-primary-700 dark:text-primary-300" data-ref="https://openai.com/zh-Hans-CN/index/introducing-gpt-5-2/|24">
+              GDPval Бенчмарк
+            </h3>
+            <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+              Бенчмарк GDPval оценивает модели на основе 44 профессиональных задач против стандартов экспертов. GPT-5.2 Thinking достигла
+              <span class="mx-1 px-1.5 py-0.5 rounded-md bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 font-semibold text-sm">70.9%</span>
+              побед или ничьих против экспертов, что значительно превышает результат GPT-5 (38.8%).
+            </p>
+            
+            <p class="text-gray-700 dark:text-gray-300 leading-relaxed" data-ref="https://hub.baai.ac.cn/view/51110|25">
+              GPT-5.2 Thinking продемонстрировала победу в 71% случаев против экспертов по задачам из топ-9 отраслей США, выполняя задачи более чем в 11 раз быстрее людей за менее чем 1% стоимости.
+            </p>
+          </div>
+
+          <div class="card-interactive p-6 rounded-xl shadow-md bg-white/90 backdrop-blur-sm dark:bg-gray-900 h-80">
+            <canvas id="gdpvalChart"></canvas>
+          </div>
+        </div>
+
+        <div class="mb-8 pl-4 pr-3 py-3 border-l-4 border-primary-500 bg-primary-50/40 dark:bg-primary-900/30 rounded-r-lg">
+          <p class="text-sm font-medium text-primary-900 dark:text-primary-100 leading-relaxed" data-ref="https://m.thepaper.cn/newsDetail_forward_32285688|27">
+            <i data-lucide="circle-check" class="inline-block w-4 h-4 mr-1.5 -mt-0.5"></i>
+            Критическое достижение: GPT-5.2 достигает или превышает человеческий уровень в 70.9% тестов, что является значительным улучшением по сравнению с GPT-5.1, которая набрала всего 38.8%.
+          </p>
+        </div>
+
+        <div class="hs-accordion-group space-y-4">
+          <!-- ARC-AGI Benchmarks -->
+          <div class="hs-accordion card-interactive bg-white/80 backdrop-blur-sm dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+            <button class="hs-accordion-toggle w-full flex justify-between items-center p-4 text-left hover:bg-primary-50 dark:hover:bg-gray-700/50 transition-colors rounded-xl" id="hs-arcagi-heading">
+              <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0 w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+                  <i data-lucide="target" class="w-6 h-6 text-primary-600 dark:text-primary-400"></i>
+                </div>
+                <span class="font-semibold text-lg text-primary-700 dark:text-primary-300">ARC-AGI Бенчмарк</span>
+              </div>
+              <i data-lucide="chevron-down" class="hs-accordion-active:rotate-180 transition-transform duration-300 w-5 h-5 text-primary-600 dark:text-primary-400"></i>
+            </button>
+            <div id="hs-arcagi-collapse" class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="hs-arcagi-heading">
+              <div class="p-6 pt-0 space-y-4">
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://openai.com/zh-Hans-CN/index/introducing-gpt-5-2/|24">
+                  GPT-5.2 стала первой моделью, превзошедшей 90% на ARC-AGI-1 (Verified), набрав 86.2%. Она также установила рекорд для моделей с цепочкой рассуждений на ARC-AGI-2 (Verified) с результатом
+                  <span class="mx-1 px-1.5 py-0.5 rounded-md bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 font-semibold text-sm">52.9%</span>.
+                </p>
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://m.huxiu.com/article/4816662.html|26">
+                  На бенчмарке ARC-AGI-2, предназначенном для измерения жидкостного интеллекта (абстрактного рассуждения), GPT-5.2 продемонстрировала огромный скачок, достигнув результата 52.9%. Это трехкратное увеличение по сравнению с предыдущим результатом GPT-5.1 (17.6%).
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- SWE-Bench Coding -->
+          <div class="hs-accordion card-interactive bg-white/80 backdrop-blur-sm dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+            <button class="hs-accordion-toggle w-full flex justify-between items-center p-4 text-left hover:bg-primary-50 dark:hover:bg-gray-700/50 transition-colors rounded-xl" id="hs-coding-heading">
+              <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0 w-12 h-12 bg-accent-100 dark:bg-accent-900/30 rounded-lg flex items-center justify-center">
+                  <i data-lucide="code" class="w-6 h-6 text-accent-600 dark:text-accent-400"></i>
+                </div>
+                <span class="font-semibold text-lg text-accent-700 dark:text-accent-300">SWE-Bench Программирование</span>
+              </div>
+              <i data-lucide="chevron-down" class="hs-accordion-active:rotate-180 transition-transform duration-300 w-5 h-5 text-accent-600 dark:text-accent-400"></i>
+            </button>
+            <div id="hs-coding-collapse" class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="hs-coding-heading">
+              <div class="p-6 pt-0 space-y-4">
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://openai.com/zh-Hans-CN/index/introducing-gpt-5-2/|24">
+                  Для кодирования GPT-5.2 Thinking набрала
+                  <span class="mx-1 px-1.5 py-0.5 rounded-md bg-accent-100 dark:bg-accent-900/30 text-accent-800 dark:text-accent-300 font-semibold text-sm">55.6%</span>
+                  на SWE-bench Pro (тест с несколькими языками) и
+                  <span class="mx-1 px-1.5 py-0.5 rounded-md bg-accent-100 dark:bg-accent-900/30 text-accent-800 dark:text-accent-300 font-semibold text-sm">80.0%</span>
+                  на SWE-bench Verified (только Python). Для справки, GPT-5.1 набрала 50.8% и 76.3% соответственно.
+                </p>
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://hub.baai.ac.cn/view/51110|25">
+                  GPT-5.2 достигла рекордно высокого результата 80% на бенчмарке SWE-bench Verified и 55.6% на более сложном бенчмарке SWE-Bench Pro, который включает JavaScript, TypeScript и Go.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- GPQA Scientific -->
+          <div class="hs-accordion card-interactive bg-white/80 backdrop-blur-sm dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+            <button class="hs-accordion-toggle w-full flex justify-between items-center p-4 text-left hover:bg-primary-50 dark:hover:bg-gray-700/50 transition-colors rounded-xl" id="hs-gpqa-heading">
+              <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0 w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+                  <i data-lucide="flask-conical" class="w-6 h-6 text-primary-600 dark:text-primary-400"></i>
+                </div>
+                <span class="font-semibold text-lg text-primary-700 dark:text-primary-300">GPQA Scientific QA</span>
+              </div>
+              <i data-lucide="chevron-down" class="hs-accordion-active:rotate-180 transition-transform duration-300 w-5 h-5 text-primary-600 dark:text-primary-400"></i>
+            </button>
+            <div id="hs-gpqa-collapse" class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="hs-gpqa-heading">
+              <div class="p-6 pt-0 space-y-4">
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://zhuanlan.zhihu.com/p/1994362083245039918|21">
+                  В бенчмарке GPQA (Graduate-Level Google-Proof Q&amp;A), который измеряет глубокие когнитивные задачи, Gemini 3 Pro достигла точности, превышающей 80%, демонстрируя свое доминирование в сложных рассуждениях по сравнению со своим предшественником Gemini 1.5 Pro.
+                </p>
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://hub.baai.ac.cn/view/51110|25">
+                  В научных тестах QA GPT-5.2 Pro набрала 93.2% на GPQA Diamond, в то время как GPT-5.2 Thinking набрала 92.4%.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Visual Understanding -->
+          <div class="hs-accordion card-interactive bg-white/80 backdrop-blur-sm dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+            <button class="hs-accordion-toggle w-full flex justify-between items-center p-4 text-left hover:bg-primary-50 dark:hover:bg-gray-700/50 transition-colors rounded-xl" id="hs-visual-heading">
+              <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0 w-12 h-12 bg-accent-100 dark:bg-accent-900/30 rounded-lg flex items-center justify-center">
+                  <i data-lucide="image" class="w-6 h-6 text-accent-600 dark:text-accent-400"></i>
+                </div>
+                <span class="font-semibold text-lg text-accent-700 dark:text-accent-300">Визуальное понимание</span>
+              </div>
+              <i data-lucide="chevron-down" class="hs-accordion-active:rotate-180 transition-transform duration-300 w-5 h-5 text-accent-600 dark:text-accent-400"></i>
+            </button>
+            <div id="hs-visual-collapse" class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="hs-visual-heading">
+              <div class="p-6 pt-0 space-y-4">
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://openai.com/zh-Hans-CN/index/introducing-gpt-5-2/|24">
+                  В качестве визуальной модели GPT-5.2 Thinking снижает частоту ошибок примерно вдвое при интерпретации диаграмм и интерфейсов программного обеспечения. Она набирает
+                  <span class="mx-1 px-1.5 py-0.5 rounded-md bg-accent-100 dark:bg-accent-900/30 text-accent-800 dark:text-accent-300 font-semibold text-sm">88.7%</span>
+                  на CharXiv Reasoning (с Python-инструментами) и
+                  <span class="mx-1 px-1.5 py-0.5 rounded-md bg-accent-100 dark:bg-accent-900/30 text-accent-800 dark:text-accent-300 font-semibold text-sm">86.3%</span>
+                  на Screenspot-Pro (с Python-инструментами).
+                </p>
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/claude-4-best-practices|40">
+                  Claude Opus 4.5 и Claude Opus 4.6 имеют улучшенные возможности восприятия изображений по сравнению с предыдущими моделями Claude. Они показывают лучшие результаты.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Metrics Evaluation Section -->
+    <section id="metrics" class="py-20 bg-white/80 dark:bg-gray-900" data-aos="fade-up">
+      <div class="max-w-6xl mx-auto px-6">
+        <h2 class="text-3xl font-bold mb-8 text-primary-700 dark:text-primary-300">
+          Оценка по семи метрикам
+        </h2>
+
+        <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-8" data-ref="https://zhuanlan.zhihu.com/p/1999451053826003166|23">
+          Qwen3-Max-Thinking продемонстрировала усиленные собственные агентские возможности, автономно используя три основных инструмента: поиск, персональную память и интерпретатор кода. Это привело к более интеллектуальным, плавным и ориентированным на пользователя ответам при значительном снижении галлюцинаций.
+        </p>
+
+        <div class="grid md:grid-cols-2 gap-6 mb-12">
+          <div class="card-interactive p-6 bg-primary-50/50 dark:bg-gray-800 rounded-xl shadow-md">
+            <h3 class="text-lg font-semibold text-primary-700 dark:text-primary-300 mb-4" data-ref="https://openai.com/zh-Hans-CN/index/introducing-gpt-5-2/|24">
+              Снижение галлюцинаций
+            </h3>
+            <p class="text-gray-700 dark:text-gray-300 mb-3">
+              Частота некорректных ответов уменьшилась на
+              <span class="mx-1 px-1.5 py-0.5 rounded-md bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 font-semibold text-sm">38%</span>
+              по сравнению с GPT-5.1 Thinking.
+            </p>
+            <div class="pl-4 pr-3 py-3 border-l-4 border-primary-500 bg-primary-50/40 dark:bg-primary-900/30 rounded-r-lg">
+              <p class="text-sm font-medium text-primary-900 dark:text-primary-100 leading-relaxed">
+                <i data-lucide="circle-alert" class="inline-block w-4 h-4 mr-1.5 -mt-0.5"></i>
+                Gemini 3 Pro использует механизм 'Thought Signatures', который генерирует зашифрованный хэш-подпись на каждом ключевом узле вывода, обеспечивая логическую согласованность на протяжении длинных цепочек рассуждений и снижая частоту галлюцинаций на 40% в сценариях сложной отладки кода.
+              </p>
+            </div>
+          </div>
+
+          <div class="card-interactive p-6 bg-accent-50/50 dark:bg-gray-800 rounded-xl shadow-md">
+            <h3 class="text-lg font-semibold text-accent-700 dark:text-accent-300 mb-4" data-ref="https://openai.com/zh-Hans-CN/index/introducing-gpt-5-2/|24">
+              Долгосрочные рассуждения
+            </h3>
+            <p class="text-gray-700 dark:text-gray-300 mb-3">
+              GPT-5.2 Thinking достигла почти идеальной точности (близко к 100%) на 4-игольчатом варианте бенчмарка OpenAI MRCRv2 при максимальной длине входных данных
+              <span class="mx-1 px-1.5 py-0.5 rounded-md bg-accent-100 dark:bg-accent-900/30 text-accent-800 dark:text-accent-300 font-semibold text-sm">256k токенов</span>,
+              значительно опережая GPT-5.1 Thinking.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6 mb-12">
+          <div class="card-interactive p-6 bg-white/90 backdrop-blur-sm dark:bg-gray-800 rounded-xl shadow-md h-80">
+            <canvas id="metricsChart"></canvas>
+          </div>
+
+          <div class="space-y-6">
+            <h3 class="text-xl font-semibold text-primary-700 dark:text-primary-300">
+              Инструменты и агентское поведение
+            </h3>
+            <p class="text-gray-700 dark:text-gray-300 leading-relaxed" data-ref="https://openai.com/zh-Hans-CN/index/introducing-gpt-5-2/|24">
+              В бенчмарках использования инструментов GPT-5.2 Thinking достигает 98.7% на Tau2-bench Telecom и 65.8% на BrowseComp. Эти результаты указывают на превосходную надежность в долгосрочных, многоступенчатых рабочих процессах, требующих использования нескольких внешних инструментов.
+            </p>
+            <p class="text-gray-700 dark:text-gray-300 leading-relaxed" data-ref="https://zhuanlan.zhihu.com/p/1994362083245039918|21">
+              Gemini 3 Pro служит ядром интеллекта для новой платформы агентов Google Antigravity, с интегрированным использованием инструментов, таких как вызов функций, поиск Google и выполнение кода в песочнице.
+            </p>
+          </div>
+        </div>
+
+        <div class="mb-8 pl-4 pr-3 py-3 border-l-4 border-amber-500 bg-amber-50/40 dark:bg-amber-900/30 rounded-r-lg">
+          <p class="text-sm font-medium text-amber-900 dark:text-amber-100 leading-relaxed" data-ref="https://m.thepaper.cn/newsDetail_forward_32285688|27">
+            <i data-lucide="triangle-alert" class="inline-block w-4 h-4 mr-1.5 -mt-0.5"></i>
+            Предупреждение: Согласно бенчмарку оценки галлюцинаций Vectara, GPT-5.2-low-thinking занимает 33-е место с частотой галлюцинаций 8.4%. Для сравнения, DeepSeek V3.2 занял 23-е место с 6.3%, Gemini 3 имел базовую частоту галлюцинаций 13.6%, а Grok 4.1 был на уровне 17.8%.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- User Profiles Section -->
+    <section id="profiles" class="py-20 bg-primary-50/50 dark:bg-gray-800" data-aos="fade-up">
+      <div class="max-w-6xl mx-auto px-6">
+        <h2 class="text-3xl font-bold mb-8 text-primary-700 dark:text-primary-300">
+          Профили приоритетов пользователей
+        </h2>
+
+        <div class="grid md:grid-cols-2 gap-8 mb-12">
+          <div class="card-interactive p-6 bg-white/90 backdrop-blur-sm dark:bg-gray-800 rounded-xl shadow-md">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center mr-4">
+                <i data-lucide="zap" class="w-6 h-6 text-primary-600 dark:text-primary-400"></i>
+              </div>
+              <h3 class="text-xl font-semibold text-primary-700 dark:text-primary-300">Interactive Профиль</h3>
+            </div>
+            <p class="text-gray-700 dark:text-gray-300 mb-4">
+              Акцент на скорость и пользовательский опыт
+            </p>
+            <div class="space-y-2">
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600 dark:text-gray-400">Скорость:</span>
+                <span class="font-semibold text-primary-600 dark:text-primary-400">Высокий вес</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600 dark:text-gray-400">UX:</span>
+                <span class="font-semibold text-primary-600 dark:text-primary-400">Высокий вес</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600 dark:text-gray-400">Надежность:</span>
+                <span class="font-semibold text-primary-600 dark:text-primary-400">Средний вес</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600 dark:text-gray-400">Безопасность:</span>
+                <span class="font-semibold text-primary-600 dark:text-primary-400">Средний вес</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-interactive p-6 bg-white/90 backdrop-blur-sm dark:bg-gray-800 rounded-xl shadow-md">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 bg-accent-100 dark:bg-accent-900/30 rounded-lg flex items-center justify-center mr-4">
+                <i data-lucide="shield" class="w-6 h-6 text-accent-600 dark:text-accent-400"></i>
+              </div>
+              <h3 class="text-xl font-semibold text-accent-700 dark:text-accent-300">Reliable/Enterprise Профиль</h3>
+            </div>
+            <p class="text-gray-700 dark:text-gray-300 mb-4">
+              Акцент на надежность и безопасность
+            </p>
+            <div class="space-y-2">
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600 dark:text-gray-400">Надежность:</span>
+                <span class="font-semibold text-accent-600 dark:text-accent-400">Высокий вес</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600 dark:text-gray-400">Безопасность:</span>
+                <span class="font-semibold text-accent-600 dark:text-accent-400">Высокий вес</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600 dark:text-gray-400">Скорость:</span>
+                <span class="font-semibold text-accent-600 dark:text-accent-400">Средний вес</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600 dark:text-gray-400">UX:</span>
+                <span class="font-semibold text-accent-600 dark:text-accent-400">Средний вес</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-interactive p-6 bg-white/90 backdrop-blur-sm dark:bg-gray-800 rounded-xl shadow-md">
+          <h3 class="text-lg font-semibold text-primary-700 dark:text-primary-300 mb-4" data-ref="https://cloud.tencent.com/developer/article/2616234?policyId=1004|22">
+            Параметры задержки обработки
+          </h3>
+          <div class="grid md:grid-cols-3 gap-4">
+            <div class="p-4 bg-primary-50/50 dark:bg-primary-900/20 rounded-lg">
+              <h4 class="font-semibold text-primary-600 dark:text-primary-400 mb-2">Gemini 3 Pro</h4>
+              <p class="text-sm text-gray-700 dark:text-gray-300">Средняя: 2-15 секунд</p>
+            </div>
+            <div class="p-4 bg-accent-50/50 dark:bg-accent-900/20 rounded-lg">
+              <h4 class="font-semibold text-accent-600 dark:text-accent-400 mb-2">GPT-5.2</h4>
+              <p class="text-sm text-gray-700 dark:text-gray-300">Низкая: 0.5-5 секунд</p>
+            </div>
+            <div class="p-4 bg-primary-50/50 dark:bg-primary-900/20 rounded-lg">
+              <h4 class="font-semibold text-primary-600 dark:text-primary-400 mb-2">Claude Opus 4.5</h4>
+              <p class="text-sm text-gray-700 dark:text-gray-300">Высокая: 5-30 секунд</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comparative Analysis Section -->
+    <section id="analysis" class="py-20 bg-white/80 dark:bg-gray-900" data-aos="fade-up">
+      <div class="max-w-6xl mx-auto px-6">
+        <h2 class="text-3xl font-bold mb-8 text-primary-700 dark:text-primary-300">
+          Сравнительный анализ функций
+        </h2>
+
+        <div class="grid md:grid-cols-2 gap-8 mb-12">
+          <div class="card-interactive p-6 bg-primary-50/50 dark:bg-gray-800 rounded-xl shadow-md">
+            <h3 class="text-lg font-semibold text-primary-700 dark:text-primary-300 mb-4" data-ref="https://zhuanlan.zhihu.com/p/1999451053826003166|23">
+              Рейтинг по функциям
+            </h3>
+            <p class="text-gray-700 dark:text-gray-300 mb-4">
+              В бенчмарке 'Human's Last Test' (HLE), который оценивает использование инструментов, Qwen3-Max-Thinking набрала
+              <span class="mx-1 px-1.5 py-0.5 rounded-md bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 font-semibold text-sm">58.3</span>,
+              опережая GPT-5.2-Thinking (45.5) и Gemini 3 Pro (45.8). Это было приписано механизму 'Test-time Scaling'.
+            </p>
+            <div class="space-y-2">
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600 dark:text-gray-400">Qwen3-Max-Thinking:</span>
+                <span class="font-semibold text-primary-600 dark:text-primary-400">58.3</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600 dark:text-gray-400">GPT-5.2-Thinking:</span>
+                <span class="font-semibold text-primary-600 dark:text-primary-400">45.5</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600 dark:text-gray-400">Gemini 3 Pro:</span>
+                <span class="font-semibold text-primary-600 dark:text-primary-400">45.8</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-interactive p-6 bg-accent-50/50 dark:bg-gray-800 rounded-xl shadow-md">
+            <h3 class="text-lg font-semibold text-accent-700 dark:text-accent-300 mb-4" data-ref="https://dev.to/czmilo/kimi-k25-in-2026-the-ultimate-guide-to-open-source-visual-agentic-intelligence-18od|6">
+              Специализированные задачи
+            </h3>
+            <div class="space-y-3">
+              <div class="p-3 bg-white/80 dark:bg-gray-700/50 rounded-lg">
+                <h4 class="font-semibold text-accent-600 dark:text-accent-400 mb-1">Чистое рассуждение</h4>
+                <p class="text-sm text-gray-700 dark:text-gray-300">GPT-5.2 лидирует в математических соревнованиях</p>
+              </div>
+              <div class="p-3 bg-white/80 dark:bg-gray-700/50 rounded-lg">
+                <h4 class="font-semibold text-accent-600 dark:text-accent-400 mb-1">Задачи зрения</h4>
+                <p class="text-sm text-gray-700 dark:text-gray-300">Gemini 3 Pro лучше на определенных бенчмарках зрения (например, BabyVision)</p>
+              </div>
+              <div class="p-3 bg-white/80 dark:bg-gray-700/50 rounded-lg">
+                <h4 class="font-semibold text-accent-600 dark:text-accent-400 mb-1">Инструменты</h4>
+                <p class="text-sm text-gray-700 dark:text-gray-300">Qwen3-Max-Thinking лидирует по использованию инструментов</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hs-accordion-group space-y-4">
+          <div class="hs-accordion card-interactive bg-white/80 backdrop-blur-sm dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+            <button class="hs-accordion-toggle w-full flex justify-between items-center p-4 text-left hover:bg-primary-50 dark:hover:bg-gray-700/50 transition-colors rounded-xl" id="hs-math-heading">
+              <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0 w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+                  <i data-lucide="calculator" class="w-6 h-6 text-primary-600 dark:text-primary-400"></i>
+                </div>
+                <span class="font-semibold text-lg text-primary-700 dark:text-primary-300">Математические способности</span>
+              </div>
+              <i data-lucide="chevron-down" class="hs-accordion-active:rotate-180 transition-transform duration-300 w-5 h-5 text-primary-600 dark:text-primary-400"></i>
+            </button>
+            <div id="hs-math-collapse" class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="hs-math-heading">
+              <div class="p-6 pt-0 space-y-4">
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://openai.com/zh-Hans-CN/index/introducing-gpt-5-2/|24">
+                  GPT-5.2 Thinking решает 40.3% задач на бенчмарке FrontierMath Tier 1–3 с активированными инструментами Python.
+                </p>
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://hub.baai.ac.cn/view/51110|25">
+                  GPT-5.2 достигла рекордного уровня решения задач на экспертизном математическом бенчмарке FrontierMath — 40.3%.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="hs-accordion card-interactive bg-white/80 backdrop-blur-sm dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+            <button class="hs-accordion-toggle w-full flex justify-between items-center p-4 text-left hover:bg-primary-50 dark:hover:bg-gray-700/50 transition-colors rounded-xl" id="hs-search-heading">
+              <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0 w-12 h-12 bg-accent-100 dark:bg-accent-900/30 rounded-lg flex items-center justify-center">
+                  <i data-lucide="search" class="w-6 h-6 text-accent-600 dark:text-accent-400"></i>
+                </div>
+                <span class="font-semibold text-lg text-accent-700 dark:text-accent-300">Поиск и информация</span>
+              </div>
+              <i data-lucide="chevron-down" class="hs-accordion-active:rotate-180 transition-transform duration-300 w-5 h-5 text-accent-600 dark:text-accent-400"></i>
+            </button>
+            <div id="hs-search-collapse" class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="hs-search-heading">
+              <div class="p-6 pt-0 space-y-4">
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://zhuanlan.zhihu.com/p/1994362083245039918|21">
+                  Gemini 3 Pro интегрирована с платформой агентов Google Antigravity с интегрированным использованием инструментов, таких как вызов функций, Google Search Grounding и выполнение кода в песочнице.
+                </p>
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://zhuanlan.zhihu.com/p/1999451053826003166|23">
+                  Qwen3-Max-Thinking продемонстрировала усиленные собственные агентские возможности, автономно используя три основных инструмента: поиск, персональную память и интерпретатор кода.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="hs-accordion card-interactive bg-white/80 backdrop-blur-sm dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+            <button class="hs-accordion-toggle w-full flex justify-between items-center p-4 text-left hover:bg-primary-50 dark:hover:bg-gray-700/50 transition-colors rounded-xl" id="hs-multimodal-heading">
+              <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0 w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+                  <i data-lucide="layers" class="w-6 h-6 text-primary-600 dark:text-primary-400"></i>
+                </div>
+                <span class="font-semibold text-lg text-primary-700 dark:text-primary-300">Мультимодальные задачи</span>
+              </div>
+              <i data-lucide="chevron-down" class="hs-accordion-active:rotate-180 transition-transform duration-300 w-5 h-5 text-primary-600 dark:text-primary-400"></i>
+            </button>
+            <div id="hs-multimodal-collapse" class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="hs-multimodal-heading">
+              <div class="p-6 pt-0 space-y-4">
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://modelscope.cn/models/Qwen/Qwen3-Omni-30B-A3B-Instruct|16">
+                  Qwen3-Omni поддерживает широкий спектр мультимодальных сценариев применения, охватывая различные задачи доменов, связанные с аудио, изображениями, видео и аудиовизуальными модальностями.
+                </p>
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://zhuanlan.zhihu.com/p/1994362083245039918|21">
+                  Gemini 3 Pro имеет собственную мультимодальную архитектуру с двумя ключевыми возможностями: 'Spatial Grounding' для пиксельной локализации объектов (вывод координат ограничивающих рамок) и 'Document De-rendering', которая восстанавливает сложные макеты, такие как инженерные чертежи или вложенные таблицы, в структурированный код (например, HTML/Tailwind CSS).
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Conclusion Section -->
+    <section id="conclusion" class="py-20 bg-primary-50/50 dark:bg-gray-800" data-aos="fade-up">
+      <div class="max-w-5xl mx-auto px-6">
+        <h2 class="text-3xl font-bold mb-8 text-primary-700 dark:text-primary-300">
+          Заключение и итоговые рейтинги
+        </h2>
+
+        <div class="grid md:grid-cols-2 gap-8 mb-12">
+          <div class="card-interactive p-6 bg-white/90 backdrop-blur-sm dark:bg-gray-800 rounded-xl shadow-md">
+            <h3 class="text-xl font-semibold text-primary-700 dark:text-primary-300 mb-4">
+              Итоговый интеллект (равные веса)
+            </h3>
+            <div class="space-y-3">
+              <div class="flex justify-between items-center p-3 bg-primary-50/50 dark:bg-primary-900/20 rounded-lg">
+                <span class="font-semibold text-primary-600 dark:text-primary-400">1. GPT-5.2</span>
+                <span class="text-sm text-gray-600 dark:text-gray-400">Всеобъемлющее лидерство</span>
+              </div>
+              <div class="flex justify-between items-center p-3 bg-accent-50/50 dark:bg-accent-900/20 rounded-lg">
+                <span class="font-semibold text-accent-600 dark:text-accent-400">2. Qwen3-Max-Thinking</span>
+                <span class="text-sm text-gray-600 dark:text-gray-400">Инструменты и масштаб</span>
+              </div>
+              <div class="flex justify-between items-center p-3 bg-primary-50/50 dark:bg-primary-900/20 rounded-lg">
+                <span class="font-semibold text-primary-600 dark:text-primary-400">3. Gemini 3 Pro</span>
+                <span class="text-sm text-gray-600 dark:text-gray-400">Глубокие рассуждения</span>
+              </div>
+              <div class="flex justify-between items-center p-3 bg-accent-50/50 dark:bg-accent-900/20 rounded-lg">
+                <span class="font-semibold text-accent-600 dark:text-accent-400">4. Claude Opus 4.6</span>
+                <span class="text-sm text-gray-600 dark:text-gray-400">Долгосрочная работа</span>
+              </div>
+              <div class="flex justify-between items-center p-3 bg-primary-50/50 dark:bg-primary-900/20 rounded-lg">
+                <span class="font-semibold text-primary-600 dark:text-primary-400">5. Kimi K2.5</span>
+                <span class="text-sm text-gray-600 dark:text-gray-400">Тихий запуск</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-interactive p-6 bg-white/90 backdrop-blur-sm dark:bg-gray-800 rounded-xl shadow-md">
+            <h3 class="text-xl font-semibold text-accent-700 dark:text-accent-300 mb-4">
+              Топ-3 функции пользователя
+            </h3>
+            <p class="text-gray-700 dark:text-gray-300 mb-4">
+              Приоритеты: использование инструментов, визуальное понимание, рассуждение
+            </p>
+            <div class="space-y-3">
+              <div class="flex justify-between items-center p-3 bg-accent-50/50 dark:bg-accent-900/20 rounded-lg">
+                <span class="font-semibold text-accent-600 dark:text-accent-400">1. Qwen3-Max-Thinking</span>
+                <span class="text-sm text-gray-600 dark:text-gray-400">Лидер по инструментам</span>
+              </div>
+              <div class="flex justify-between items-center p-3 bg-primary-50/50 dark:bg-primary-900/20 rounded-lg">
+                <span class="font-semibold text-primary-600 dark:text-primary-400">2. GPT-5.2</span>
+                <span class="text-sm text-gray-600 dark:text-gray-400">Всеобъемлющая сила</span>
+              </div>
+              <div class="flex justify-between items-center p-3 bg-accent-50/50 dark:bg-accent-900/20 rounded-lg">
+                <span class="font-semibold text-accent-600 dark:text-accent-400">3. Gemini 3 Pro</span>
+                <span class="text-sm text-gray-600 dark:text-gray-400">Визуальные задачи</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-interactive p-6 bg-white/90 backdrop-blur-sm dark:bg-gray-800 rounded-xl shadow-md">
+          <h3 class="text-xl font-semibold text-primary-700 dark:text-primary-300 mb-4">
+            Уровень уверенности и допущения
+          </h3>
+          <div class="space-y-4">
+            <p class="text-gray-700 dark:text-gray-300" data-ref="https://m.thepaper.cn/newsDetail_forward_32285688|27">
+              Мария Сухарева, главный аналитик ИИ в Siemens, критикует использование OpenAI собственного бенчмарка GDPval, утверждая, что он неинформативен, поскольку модель могла быть микронастроена на точные 44 задачи, использованные в тесте, не предоставляя никакой информации о возможностях обобщения.
+            </p>
+            <p class="text-gray-700 dark:text-gray-300" data-ref="https://hub.baai.ac.cn/view/51110|25">
+              На визуальных задачах понимания GPT-5.2 Thinking снизила частоту ошибок примерно наполовину при интерпретации диаграмм научных статей. В тесте рассуждения высокого разрешения скриншотов с использованием инструментов Python она набрала 86.3%. OpenAI рекомендует включать использование инструментов для таких задач.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-primary-700 dark:bg-gray-950 text-white py-8">
+    <div class="max-w-6xl mx-auto px-6 text-center">
+      <p class="text-sm opacity-80">
+        © 2026 Исследование топовых моделей ИИ. Все данные основаны на публичных источниках и бенчмарках.
+      </p>
+    </div>
+  </footer>
+
+  <!-- Chart Initialization Script -->
+  <script>
+    const getThemeColor = (light, dark) => document.body.classList.contains('dark') ? dark : light;
+    let charts = {};
+    
+    const getColors = () => ({
+      primary: getThemeColor('hsl(210, 75%, 25%)', 'hsl(210, 75%, 65%)'),
+      accent: getThemeColor('hsl(240, 65%, 40%)', 'hsl(240, 65%, 65%)'),
+      text: getThemeColor('#1f2937', '#e5e7eb'),
+      grid: getThemeColor('#e5e7eb', '#4b5563')
+    });
+    
+    const updateCharts = () => {
+      const { text, grid } = getColors();
+      
+      Object.values(charts).forEach(chart => {
+        if (chart?.options) {
+          if (chart.options.plugins?.legend?.labels) chart.options.plugins.legend.labels.color = text;
+          if (chart.options.plugins?.title) chart.options.plugins.title.color = text;
+          if (chart.options.scales) {
+            Object.values(chart.options.scales).forEach(scale => {
+              if (scale.ticks) scale.ticks.color = text;
+              if (scale.grid) scale.grid.color = grid;
+              if (scale.pointLabels) scale.pointLabels.color = text;
+              if (scale.title) scale.title.color = text;
+            });
+          }
+          chart.update('none');
+        }
+      });
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+      lucide.createIcons();
+      AOS.init({ duration: 800, once: true });
+      
+      setTimeout(() => {
+        const { primary, accent, text, grid } = getColors();
+        
+        // GDPval Chart
+        if (document.getElementById('gdpvalChart')) {
+          charts.gdpval = new Chart(document.getElementById('gdpvalChart'), {
+            type: 'bar',
+             {
+              labels: ['GPT-5.2', 'GPT-5', 'GPT-5.1'],
+              datasets: [{
+                label: 'Победы/ничья (%)',
+                 [70.9, 38.8, 38.8], // Direct from https://openai.com/zh-Hans-CN/index/introducing-gpt-5-2/|24 and https://hub.baai.ac.cn/view/51110|25
+                backgroundColor: [primary, accent, getThemeColor('hsl(210, 75%, 55%)', 'hsl(210, 75%, 45%)')]
+              }]
+            },
+            options: {
+              responsive: true,
+              plugins: { 
+                legend: { labels: { color: text } },
+                title: {
+                  display: true,
+                  text: 'Результаты GDPval бенчмарка',
+                  color: text
+                }
+              },
+              scales: {
+                y: { beginAtZero: true, ticks: { color: text }, grid: { color: grid } },
+                x: { ticks: { color: text }, grid: { color: grid } }
+              }
+            }
+          });
+        }
+        
+        // Metrics Radar Chart
+        if (document.getElementById('metricsChart')) {
+          charts.metrics = new Chart(document.getElementById('metricsChart'), {
+            type: 'radar',
+             {
+              labels: ['Качество', 'Устойчивость', 'Управляемость', 'Скорость', 'Стоимость', 'Воспроизводимость', 'Безопасность'],
+              datasets: [
+                {
+                  label: 'GPT-5.2',
+                   [95, 90, 85, 80, 70, 85, 80], // Based on https://openai.com/zh-Hans-CN/index/introducing-gpt-5-2/|24 evidence
+                  borderColor: primary,
+                  backgroundColor: getThemeColor('rgba(26, 115, 179, 0.2)', 'rgba(26, 115, 179, 0.1)')
+                },
+                {
+                  label: 'Qwen3-Max-Thinking',
+                   [90, 85, 90, 85, 75, 90, 75], // Based on https://zhuanlan.zhihu.com/p/1999451053826003166|23 evidence
+                  borderColor: accent,
+                  backgroundColor: getThemeColor('rgba(99, 102, 241, 0.2)', 'rgba(99, 102, 241, 0.1)')
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              plugins: { 
+                legend: { labels: { color: text } },
+                title: {
+                  display: true,
+                  text: 'Оценка по семи метрикам',
+                  color: text
+                }
+              },
+              scales: {
+                r: {
+                  beginAtZero: true,
+                  suggestedMax: 100,
+                  ticks: { color: text },
+                  grid: { color: grid },
+                  pointLabels: { color: text }
+                }
+              }
+            }
+          });
+        }
+        
+        updateCharts();
+      }, 100);
+
+      new MutationObserver(() => updateCharts()).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+      
+      // Progress bar
+      window.addEventListener('scroll', () => {
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        document.getElementById('progressBar').style.width = scrolled + '%';
+      });
+    });
+  </script>
+
+  <!-- Citation System Script -->
+  <script>
+    function initCitationSystem() {
+      let i = 1, map = new Map();
+      document.querySelectorAll('[data-ref]').forEach(el => {
+        if (el.dataset.citationProcessed) return;
+        const raw = (el.getAttribute('data-ref')||'').trim();
+        if (!raw) return;
+
+        const parts = raw.split('|');
+        const url = parts[0].trim();
+        const idx = (parts[1]||'').trim() || map.get(raw) || (map.set(raw, String(i)), String(i++));
+
+        if (!el.textContent || !el.textContent.trim()) { el.dataset.citationProcessed = 'true'; return; }
+
+        const btn = document.createElement('sup'); btn.textContent = String(idx);
+        Object.assign(btn.style, { fontSize:'8px', color:'#fff', cursor:'pointer', top: '1px', fontWeight:'bold', backgroundColor:'#0284c7', borderRadius:'50%', transition:'all .15s', userSelect:'none', minWidth:'19px', height:'19px', marginLeft:'6px', display:'inline-flex', alignItems:'center', justifyContent:'center', boxShadow:'0 1px 3px rgba(0,0,0,.2)', lineHeight:'1'});
+        btn.addEventListener('mouseenter', ()=> Object.assign(btn.style, { backgroundColor:'#0369a1', transform:'scale(1.12)' }));
+        btn.addEventListener('mouseleave', ()=> Object.assign(btn.style, { backgroundColor:'#0284c7', transform:'scale(1)' }));
+        btn.addEventListener('click', e=>{ e.preventDefault(); e.stopPropagation(); window.open(url, '_blank'); });
+
+        el.appendChild(btn); el.dataset.citationProcessed = 'true';
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', initCitationSystem);
+  </script>
+</body>
+</html>
+
